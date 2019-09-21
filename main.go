@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -32,7 +31,7 @@ func main() {
 
 	flag.Parse()
 	if len(flag.Args()) == 0 {
-		log.Fatalln("Usage: gong [files]")
+		fmt.Println("Please provide files. Usage: gong [files]")
 	}
 
 	// Upload each files, one per one.
