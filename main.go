@@ -55,6 +55,7 @@ func main() {
 	wg.Wait()
 }
 
+// Actually upload the file
 func upload(filepath string) (string, error) {
 	// Open the file, reading only.
 	file, err := os.Open(filepath)
@@ -117,6 +118,7 @@ func upload(filepath string) (string, error) {
 
 }
 
+// Check if the file exists
 func exists(path string) bool {
 	_, err := os.Stat(path)
 	return !os.IsNotExist(err)
