@@ -31,7 +31,7 @@ func main() {
 
 	flag.Parse()
 	if len(flag.Args()) == 0 {
-		fmt.Println("Please provide files. Usage: gong [files]")
+		fmt.Println("Please provide arguments. Usage: gong [files]")
 	}
 
 	// Upload each files, one per one.
