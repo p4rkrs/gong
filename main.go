@@ -39,6 +39,7 @@ func main() {
 		wg.Add(1)
 		go func(file string) {
 			if exists(file) {
+				// Upload the file
 				link, err := upload(file)
 				if err != nil {
 					fmt.Println(file+":", "upload failed:", err)
@@ -55,22 +56,27 @@ func main() {
 }
 
 func upload(filepath string) (string, error) {
+	// Open the file, reading only.
 	file, err := os.Open(filepath)
 	if err != nil {
 		return "", err
 	}
+
 	var b bytes.Buffer
 	w := multipart.NewWriter(&b)
+	// Get file info
 	fi, err := os.Stat(filepath)
 	if err != nil {
 		return "", err
 	}
 
-	// Write to form
+	// Create form
 	form, err := w.CreateFormFile("files[]", fi.Name())
 	if err != nil {
 		return "", err
 	}
+
+	// Write to form
 	if _, err := io.Copy(form, file); err != nil {
 		return "", err
 	}
@@ -83,6 +89,7 @@ func upload(filepath string) (string, error) {
 		return "", err
 	}
 
+	// Set the correct Content-Type
 	req.Header.Set("Content-Type", w.FormDataContentType())
 
 	// Prepare client and call API
@@ -98,13 +105,15 @@ func upload(filepath string) (string, error) {
 	var r Response
 	json.Unmarshal(body, &r)
 
+	// Close the body
 	resp.Body.Close()
 
 	if r.Success {
 		return r.Files[0].URL, nil
 	}
 
-	return "Upload failed.", nil
+	// Unknown error. Check your network.
+	return "Upload failed. Check your network.", nil
 
 }
 
